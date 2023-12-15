@@ -91,3 +91,4 @@ for i = 1:iterations
 end
 
 
+%Solve the Coupled Riccati Equations to Verify Lyapunov Iterations
