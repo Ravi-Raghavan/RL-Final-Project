@@ -76,6 +76,17 @@ P1_values{1} = P1;
 P2_values{1} = P2;
 P3_values{1} = P3;
 
+%Store Performance Criterion Values for each Player
+J1_values = cell(1, iterations + 1);
+J1_values{1} = x' * P1 * x;
+
+J2_values = cell(1, iterations + 1);
+J2_values{1} = x' * P2 * x;
+
+J3_values = cell(1, iterations + 1);
+J3_values{1} = x' * P3 * x;
+
+
 for i = 1:iterations
     P1_updated = lyap2((A-S1*P1-S2*P2-S3*P3)',Q1+P1*S1*P1+P2*S21*P2+P3*S31*P3);
     P2_updated = lyap2((A-S1*P1-S2*P2-S3*P3)',Q2+P1*S12*P1+P2*S2*P2+P3*S32*P3);
@@ -88,7 +99,8 @@ for i = 1:iterations
     P1_values{i + 1} = P1_updated;
     P2_values{i + 1} = P2_updated;
     P3_values{i + 1} = P3_updated;
+
+    J1_values{i + 1} = x' * P1 * x;
+    J2_values{i + 1} = x' * P2 * x;
+    J3_values{i + 1} = x' * P3 * x;
 end
-
-
-%Solve the Coupled Riccati Equations to Verify Lyapunov Iterations
