@@ -5,7 +5,7 @@
 clear all
 
 %Initialize the state value
-x = ones(1, 6)';
+x = [0.0873, 0.0524, 0.0698, 0,0,0]';
 
 %Note: Currently, values of A, B1, B2, B3, Q Matrices, R matrices were set
 %to bullshit values. This needs to be verified b4 submission!
@@ -34,20 +34,20 @@ B3 = [-0.0153 -1.526 0.0032 0.3261 0 0;
       0.0064 1.5849 0 0 -0.0168 0]';
 
 %Get values of Q matrices
-Q1=4*eye(6);
-Q2=10*eye(6);
-Q3=10*eye(6);
+Q1=0.005*eye(6);
+Q2=0.005*eye(6);
+Q3=0.005*eye(6);
 
 %Get values of R matrices
-R11=2*eye(3);
-R12=eye(3);
-R13=eye(3);
-R21=eye(3);
-R22=5*eye(3);
-R23=eye(3);
-R31=5*eye(3);
-R32=eye(3);
-R33=eye(3);
+R11=0.01*eye(3);
+R12=0.01*eye(3);
+R13=0.01*eye(3);
+R21=0.01*eye(3);
+R22=0.01*eye(3);
+R23=0.01*eye(3);
+R31=0.01*eye(3);
+R32=0.01*eye(3);
+R33=0.01*eye(3);
 
 %Set values of S based on B and R matrices
 S1=B1*inv(R11)*B1';
