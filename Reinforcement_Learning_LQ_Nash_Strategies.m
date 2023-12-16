@@ -60,6 +60,12 @@ B1 = vertcat(zeros(3,3), inv(J) * G1);
 B2 = vertcat(zeros(3,3), inv(J) * G2);
 B3 = vertcat(zeros(3,3), inv(J) * G3);
 
+%All of these equal 6 which proves that (A, Bi) is always controllable for
+%all Bi
+rank1 = rank([B1, A * B1, A^2 * B1, A^3 * B1, A^4 * B1, A^5 * B1]);
+rank2 = rank([B2, A * B2, A^2 * B2, A^3 * B2, A^4 * B2, A^5 * B2]);
+rank3 = rank([B3, A * B3, A^2 * B3, A^3 * B3, A^4 * B3, A^5 * B3]);
+
 %Initialize the state value
 x_initial = [0.0873, 0.0524, 0.0698, 0,0,0]';
 
@@ -120,7 +126,7 @@ J3_values{1} = x_initial' * P3 * x_initial;
 for i = 1:iterations
     P1_updated = lyap2((A-S1*P1-S2*P2-S3*P3)',Q1+P1*S1*P1+P2*S21*P2+P3*S31*P3);
     P2_updated = lyap2((A-S1*P1-S2*P2-S3*P3)',Q2+P1*S12*P1+P2*S2*P2+P3*S32*P3);
-    P3_updated = lyap2((A-S1*P1-S2*P2-S3*P3)',Q2+P1*S13*P1+P2*S23*P2+P3*S3*P3);
+    P3_updated = lyap2((A-S1*P1-S2*P2-S3*P3)',Q3+P1*S13*P1+P2*S23*P2+P3*S3*P3);
 
     P1 = P1_updated;
     P2 = P2_updated;
@@ -140,46 +146,93 @@ F1 = inv(R11) * B1' * P1;
 F2 = inv(R22) * B2' * P2;
 F3 = inv(R33) * B3' * P3;
 
-u1 = @(x) -F1 * x;
-u2 = @(x) -F2 * x;
-u3 = @(x) -F3 * x;
+%Clip values so that the amplitude of the torque is no more than 0.02 as
+%per what the paper states
+clip = @(x) min(max(x, -0.02), 0.02);
+
+%Define Microsatellite Control Strategies
+u1 = @(x) clip(-F1 * x);
+u2 = @(x) clip(-F2 * x);
+u3 = @(x) clip(-F3 * x);
 
 %Define time span
 time = [0, 200];
 
 % Define the system dynamics function
-sys_dynamics = @(t, x) A * x + B1 * u1(x) + B2 * u2(x) + B3 * u3(x);
-[t, x] = ode45(sys_dynamics, time, x_initial);
+sys_dynamics = @(t, x) (A * x + B1 * u1(x) + B2 * u2(x) + B3 * u3(x));
+[t, x] = ode89(sys_dynamics, time, x_initial);
 
-
-figure;  % Create a new figure
-hold on;  % Enable hold to overlay plots on the same figure
-
-plot(t, x(:, 1), 'r-', 'LineWidth', 2);  % Plot the first line in red
-plot(t, x(:, 2), 'b-', 'LineWidth', 2);  % Plot the second line in green with dashed line
-plot(t, x(:, 3), 'g-', 'LineWidth', 2);  % Plot the third line in blue with dash-dot line
-
-hold off;  % Disable hold to stop overlaying plots
+figure;  
+hold on;  
+plot(t, x(:, 1), 'r-', 'LineWidth', 2);  
+plot(t, x(:, 2), 'b-', 'LineWidth', 2);  
+plot(t, x(:, 3), 'g-', 'LineWidth', 2); 
+hold off;  
 
 % Add labels and legend
 xlabel('time/s');
 ylabel('attitude/rad');
 legend('γ', 'θ', 'ψ');
 
-
-figure;  % Create a new figure
-hold on;  % Enable hold to overlay plots on the same figure
-
-plot(t, x(:, 4), 'r-', 'LineWidth', 2);  % Plot the first line in red
-plot(t, x(:, 5), 'b-', 'LineWidth', 2);  % Plot the second line in green with dashed line
-plot(t, x(:, 6), 'g-', 'LineWidth', 2);  % Plot the third line in blue with dash-dot line
-
-hold off;  % Disable hold to stop overlaying plots
+figure;  
+hold on; 
+plot(t, x(:, 4), 'r-', 'LineWidth', 2);  
+plot(t, x(:, 5), 'b-', 'LineWidth', 2);  
+plot(t, x(:, 6), 'g-', 'LineWidth', 2);  
+hold off;  
 
 % Add labels and legend
 xlabel('time/s');
 ylabel('w/rad/s');
 legend({'$w_x$', '$w_y$', '$w_z$'}, 'Interpreter', 'latex', 'FontSize', 12);
 
+%Now we will be plotting control torques of the microsatellites
 
+%Define time span
+time = [0, 300];
 
+% Define the system dynamics function
+sys_dynamics = @(t, x) (A * x + B1 * u1(x) + B2 * u2(x) + B3 * u3(x));
+[t, x] = ode89(sys_dynamics, time, x_initial);
+
+figure; 
+hold on;
+u1_values = u1(x');
+u1_values = u1_values';
+plot(t, u1_values(:, 1), 'r-', 'LineWidth', 2);  
+plot(t, u1_values(:, 2), 'b-', 'LineWidth', 2);  
+plot(t, u1_values(:, 3), 'g-', 'LineWidth', 2);  
+hold off;
+
+% Add labels and legend
+xlabel('time/s');
+ylabel('control torque $u_1$/N$\cdot$m', 'Interpreter', 'latex');
+legend({'$u_{1x}$', '$u_{1y}$', '$u_{1z}$'}, 'Interpreter', 'latex', 'FontSize', 12);
+
+figure; 
+hold on;
+u2_values = u2(x');
+u2_values = u2_values';
+plot(t, u2_values(:, 1), 'r-', 'LineWidth', 2);  
+plot(t, u2_values(:, 2), 'b-', 'LineWidth', 2);  
+plot(t, u2_values(:, 3), 'g-', 'LineWidth', 2);  
+hold off;
+
+% Add labels and legend
+xlabel('time/s');
+ylabel('control torque $u_2$/N$\cdot$m', 'Interpreter', 'latex');
+legend({'$u_{2x}$', '$u_{2y}$', '$u_{2z}$'}, 'Interpreter', 'latex', 'FontSize', 12);
+
+figure; 
+hold on;
+u3_values = u3(x');
+u3_values = u3_values';
+plot(t, u3_values(:, 1), 'r-', 'LineWidth', 2);  
+plot(t, u3_values(:, 2), 'b-', 'LineWidth', 2);  
+plot(t, u3_values(:, 3), 'g-', 'LineWidth', 2);  
+hold off;
+
+% Add labels and legend
+xlabel('time/s');
+ylabel('control torque $u_3$/N$\cdot$m', 'Interpreter', 'latex');
+legend({'$u_{3x}$', '$u_{3y}$', '$u_{3z}$'}, 'Interpreter', 'latex', 'FontSize', 12);
