@@ -40,13 +40,13 @@ Jy = J(2, 2);
 Jz = J(3, 3);
 
 % w0 Value as given to us
-w0 = 7.292 * 10^(-5);
+w0 = 7.292 .* 10^(-5);
 
 % Storage values
-v1 = (-1 * ((Jy - Jz) / Jx) * w0^2);
-v2 = (-1 * ((Jy - Jz - Jx) / Jx) * w0);
-v3 = (-1 * ((Jy - Jx) / Jz) * w0^2);
-v4 = (1 * ((Jy - Jz - Jx) / Jz) * w0);
+v1 = (-1 .* ((Jy - Jz)      ./ Jx) .* w0^2);
+v2 = (-1 .* ((Jy - Jz - Jx) ./ Jx) .* w0);
+v3 = (-1 .* ((Jy - Jx)      ./ Jz) .* w0^2);
+v4 = ( 1 .* ((Jy - Jz - Jx) ./ Jz) .* w0);
 
 % Set up A and B matrices
 A = [0  0 0  1  0 0 ;
@@ -87,13 +87,13 @@ R32=0.01*eye(3);
 R33=0.01*eye(3);
 
 % Set values of S based on B and R matrices
-S1 = B1 / R11 * B1';
+S1  = B1 / R11 * B1';
 S12 = B1 / R11 * R21 / R11 * B1';
 S13 = B1 / R11 * R31 / R11 * B1';
-S2 = B2 / R22 * B2';
+S2  = B2 / R22 * B2';
 S21 = B2 / R22 * R12 / R22 * B2';
 S23 = B2 / R22 * R32 / R22 * B2';
-S3 = B3 / R33 * B3';
+S3  = B3 / R33 * B3';
 S31 = B3 / R33 * R13 / R33 * B3';
 S32 = B3 / R33 * R23 / R33 * B3';
 
@@ -194,7 +194,7 @@ legend({'$w_x$', '$w_y$', '$w_z$'}, 'Interpreter', 'latex', 'FontSize', 12);
 xlim([0, 300]);
 
 % Set y-axis limits
-ylim([-7 * 10^(-3), 1 * 10^(-3)]);
+ylim([-7 .* 10^(-3), 1 .* 10^(-3)]);
 
 % Now we will be plotting control torques of the microsatellites
 
