@@ -151,9 +151,9 @@ F3 = inv(R33) * B3' * P3;
 clip = @(x) min(max(x, -0.02), 0.02);
 
 %Define Microsatellite Control Strategies
-u1 = @(x) clip(-F1 * x);
-u2 = @(x) clip(-F2 * x);
-u3 = @(x) clip(-F3 * x);
+u1 = @(x) (-F1 * x);
+u2 = @(x) (-F2 * x);
+u3 = @(x) (-F3 * x);
 
 %Define time span
 time = [0, 200];
