@@ -146,17 +146,13 @@ F1 = inv(R11) * B1' * P1;
 F2 = inv(R22) * B2' * P2;
 F3 = inv(R33) * B3' * P3;
 
-%Clip values so that the amplitude of the torque is no more than 0.02 as
-%per what the paper states
-clip = @(x) min(max(x, -0.02), 0.02);
-
 %Define Microsatellite Control Strategies
 u1 = @(x) (-F1 * x);
 u2 = @(x) (-F2 * x);
 u3 = @(x) (-F3 * x);
 
 %Define time span
-time = [0, 200];
+time = [0, 300];
 
 % Define the system dynamics function
 sys_dynamics = @(t, x) (A * x + B1 * u1(x) + B2 * u2(x) + B3 * u3(x));
@@ -174,6 +170,13 @@ xlabel('time/s');
 ylabel('attitude/rad');
 legend('γ', 'θ', 'ψ');
 
+% Set x-axis limits
+xlim([0, 300]);
+
+% Set y-axis limits
+ylim([-0.02, 0.1]);
+
+
 figure;  
 hold on; 
 plot(t, x(:, 4), 'r-', 'LineWidth', 2);  
@@ -185,6 +188,12 @@ hold off;
 xlabel('time/s');
 ylabel('w/rad/s');
 legend({'$w_x$', '$w_y$', '$w_z$'}, 'Interpreter', 'latex', 'FontSize', 12);
+
+% Set x-axis limits
+xlim([0, 300]);
+
+% Set y-axis limits
+ylim([-7 * 10^(-3), 1 * 10^(-3)]);
 
 %Now we will be plotting control torques of the microsatellites
 
@@ -209,6 +218,12 @@ xlabel('time/s');
 ylabel('control torque $u_1$/N$\cdot$m', 'Interpreter', 'latex');
 legend({'$u_{1x}$', '$u_{1y}$', '$u_{1z}$'}, 'Interpreter', 'latex', 'FontSize', 12);
 
+% Set x-axis limits
+xlim([0, 300]);
+
+% Set y-axis limits
+ylim([-0.02, 0.02]);
+
 figure; 
 hold on;
 u2_values = u2(x');
@@ -223,6 +238,12 @@ xlabel('time/s');
 ylabel('control torque $u_2$/N$\cdot$m', 'Interpreter', 'latex');
 legend({'$u_{2x}$', '$u_{2y}$', '$u_{2z}$'}, 'Interpreter', 'latex', 'FontSize', 12);
 
+% Set x-axis limits
+xlim([0, 300]);
+
+% Set y-axis limits
+ylim([-0.02, 0.02]);
+
 figure; 
 hold on;
 u3_values = u3(x');
@@ -236,3 +257,9 @@ hold off;
 xlabel('time/s');
 ylabel('control torque $u_3$/N$\cdot$m', 'Interpreter', 'latex');
 legend({'$u_{3x}$', '$u_{3y}$', '$u_{3z}$'}, 'Interpreter', 'latex', 'FontSize', 12);
+
+% Set x-axis limits
+xlim([0, 300]);
+
+% Set y-axis limits
+ylim([-0.02, 0.02]);
