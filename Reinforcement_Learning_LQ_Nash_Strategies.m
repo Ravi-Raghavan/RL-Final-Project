@@ -136,9 +136,9 @@ for i = 1:iterations
     P2_values{i + 1} = P2_updated;
     P3_values{i + 1} = P3_updated;
 
-    J1_values{i + 1} = x_initial' * P1 * x_initial;
-    J2_values{i + 1} = x_initial' * P2 * x_initial;
-    J3_values{i + 1} = x_initial' * P3 * x_initial;
+    J1_values{i + 1} = 0.5 * x_initial' * P1 * x_initial;
+    J2_values{i + 1} = 0.5 * x_initial' * P2 * x_initial;
+    J3_values{i + 1} = 0.5 * x_initial' * P3 * x_initial;
 end
 
 %Define each policy accordingly
