@@ -2,7 +2,7 @@
 % [Applications of Nash Differential Games to Aerospace]
 
 % Clear All Variables in our Workspace
-% clear all;
+clear all;
 
 % Inertia Matrix
 J_ast = [90 10 5; 
@@ -167,6 +167,7 @@ plot(t, x(:, 3), 'g-', 'LineWidth', 2);
 hold off;  
 
 % Add labels and legend
+title('Optimal System State Over Time');
 xlabel('time/s');
 ylabel('attitude/rad');
 legend('γ', 'θ', 'ψ');
@@ -186,6 +187,7 @@ plot(t, x(:, 6), 'g-', 'LineWidth', 2);
 hold off;  
 
 % Add labels and legend
+title('Optimal System Angular Velocity Over Time');
 xlabel('time/s');
 ylabel('w/rad/s');
 legend({'$w_x$', '$w_y$', '$w_z$'}, 'Interpreter', 'latex', 'FontSize', 12);
@@ -215,6 +217,7 @@ plot(t, u1_values(:, 3), 'g-', 'LineWidth', 2);
 hold off;
 
 % Add labels and legend
+title('Optimal Control for Micro-Satellite 1 Over Time');
 xlabel('time/s');
 ylabel('control torque $u_1$/N$\cdot$m', 'Interpreter', 'latex');
 legend({'$u_{1x}$', '$u_{1y}$', '$u_{1z}$'}, 'Interpreter', 'latex', 'FontSize', 12);
@@ -235,6 +238,7 @@ plot(t, u2_values(:, 3), 'g-', 'LineWidth', 2);
 hold off;
 
 % Add labels and legend
+title('Optimal Control for Micro-Satellite 2 Over Time');
 xlabel('time/s');
 ylabel('control torque $u_2$/N$\cdot$m', 'Interpreter', 'latex');
 legend({'$u_{2x}$', '$u_{2y}$', '$u_{2z}$'}, 'Interpreter', 'latex', 'FontSize', 12);
@@ -255,6 +259,7 @@ plot(t, u3_values(:, 3), 'g-', 'LineWidth', 2);
 hold off;
 
 % Add labels and legend
+title('Optimal Control for Micro-Satellite 3 Over Time');
 xlabel('time/s');
 ylabel('control torque $u_3$/N$\cdot$m', 'Interpreter', 'latex');
 legend({'$u_{3x}$', '$u_{3y}$', '$u_{3z}$'}, 'Interpreter', 'latex', 'FontSize', 12);
